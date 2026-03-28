@@ -336,3 +336,47 @@ ls
     \caption{Perbandingan Direktori Sebelum dan Sesudah Target \texttt{clean} di Makefile}
     \label{fig:m06-make-clean-comparison}
 \end{figure}
+
+
+% --- Tugas mandiri ---
+\newpage
+\section{Hands-On}
+\label{sec:m06-hands-on}
+
+Pada sesi Hands-On ini, Anda akan diminta untuk menggabungkan pengetahuan dari \textbf{Modul 5 (Sistem Build dengan GCC) dan Modul 6 (Otomatisasi dengan Makefile)}. Anda akan membangun sebuah program kalkulator modular sederhana. Buktikan setiap langkah yang Anda lakukan dengan \textit{screenshot} terminal.
+
+\subsection{Tugas 1: Persiapan File Kode Sumber (C)}
+\begin{enumerate}
+    \item Buatlah sebuah direktori baru bernama \texttt{tugas-kalkulator} dan masuk ke dalamnya.
+    \item Buatlah tiga buah file C menggunakan \texttt{nano}:
+    \begin{itemize}
+        \item \textbf{\texttt{kalkulator.h}} : Berisi deklarasi dua fungsi: \texttt{tambah(int a, int b)} dan \texttt{kurang(int a, int b)}.
+        \item \textbf{\texttt{kalkulator.c}} : Berisi implementasi/isi dari fungsi \texttt{tambah} dan \texttt{kurang} tersebut.
+        \item \textbf{\texttt{utama.c}} : Berisi fungsi \texttt{main()} yang memanggil fungsi \texttt{tambah(10, 5)} dan \texttt{kurang(10, 5)} lalu mencetak hasilnya ke layar menggunakan \texttt{printf}. Jangan lupa melakukan \texttt{\#include "kalkulator.h"}.
+    \end{itemize}
+    \item \textbf{Bukti:} Sertakan \textbf{screenshot} kode sumber dari ketiga file tersebut menggunakan perintah \texttt{cat nama\_file}.
+\end{enumerate}
+
+\subsection{Tugas 2: Kompilasi Manual dengan GCC (Review Modul 5)}
+\begin{enumerate}
+    \item Lakukan tahapan kompilasi secara merinci untuk file \texttt{utama.c} dan \texttt{kalkulator.c} hingga menjadi file objek (\texttt{.o}) menggunakan flag \texttt{-c}.
+    \item Gabungkan (Link) kedua file objek tersebut (\texttt{utama.o} dan \texttt{kalkulator.o}) menjadi sebuah \textit{executable} utuh bernama \texttt{kalkulator-manual}.
+    \item Jalankan \texttt{./kalkulator-manual} untuk memastikan program berjalan dengan benar.
+    \item \textbf{Bukti:} Sertakan \textbf{screenshot} perintah-perintah kompilasi GCC tersebut beserta hasil eksekusi programnya.
+\end{enumerate}
+
+\subsection{Tugas 3: Mengotomatisasi dengan Makefile (Review Modul 6)}
+\begin{enumerate}
+    \item Hapus file objek (\texttt{.o}) dan aplikasi *executable* (\texttt{kalkulator-manual}) yang telah Anda buat pada Tugas 2 secara manual (menggunakan perintah \texttt{rm}).
+    \item Buatlah sebuah berkas \texttt{Makefile} untuk mengotomatisasi proses pada Tugas 2. 
+    \item Pastikan \texttt{Makefile} tersebut memiliki:
+    \begin{itemize}
+        \item Variabel \texttt{CC} untuk \texttt{gcc}.
+        \item Variabel \texttt{CFLAGS} yang minimal berisi \texttt{-Wall}.
+        \item Target utama bernama \texttt{kalkulator-otomatis} bermagnitudo dependensi/syarat dari kode C yang Anda buat.
+        \item Target \texttt{clean} untuk membersihkan folder kerja dari file \texttt{.o} dan program \textit{executable}.
+    \end{itemize}
+    \item Jalankan perintah \texttt{make}. Tunjukkan bahwa program berhasil dikompilasi secara otomatis.
+    \item Jalankan perintah \texttt{make clean}. Tunjukkan melalui perintah \texttt{ls} bahwa folder kerja Anda kembali bersih.
+    \item \textbf{Bukti:} Sertakan \textbf{screenshot} isi \texttt{Makefile} Anda (gunakan \texttt{cat Makefile}), \textbf{screenshot} eksekusi \texttt{make} dan hasil jalannya program, serta \textbf{screenshot} eksekusi \texttt{make clean} dengan bukti folder kembali bersih (\texttt{ls}).
+\end{enumerate}
