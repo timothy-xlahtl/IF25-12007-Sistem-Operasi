@@ -1,6 +1,9 @@
-# Modul Praktikum Sistem Operasi (IF25-12007)
+# IF25-12007 Sistem Operasi - Repositori Dokumen Praktikum Berbasis LaTeX
 
-Template LaTeX modul praktikum dan hands-on mata kuliah **Sistem Operasi (IF25-12007)** — Institut Teknologi Sumatera.
+Repositori ini menyediakan template dan materi dokumen akademik untuk mata kuliah **Sistem Operasi (IF25-12007)** di Institut Teknologi Sumatera (ITERA), meliputi:
+- **Modul Praktikum** (dokumen instruksi praktikum per pertemuan)
+- **Hands-On** (tugas mahasiswa)
+- **Template Laporan** (template generik laporan hands-on)
 
 ---
 
@@ -23,136 +26,191 @@ Template LaTeX modul praktikum dan hands-on mata kuliah **Sistem Operasi (IF25-1
 
 ---
 
-## Struktur Proyek
+## 1. Overview
 
-```
-Modul Praktikum/
-├── main.tex              ← Entry point (compile file ini)
-├── config.sty            ← Package & metadata bersama
-├── Referensi.bib         ← Bibliografi bersama
-├── chapters/
-│   ├── modul_01.tex      ← Satu file per modul
-│   ├── modul_02.tex
-│   ├── ...
-│   └── modul_12.tex
-└── Figure/
-    ├── ifitera-header.png  ← Header bersama
-    ├── 01/                 ← Gambar modul 1
-    ├── 02/                 ← Gambar modul 2
-    ├── ...
-    └── 12/                 ← Gambar modul 12
+### Tujuan
+
+- Menyediakan standar penulisan dokumen praktikum berbasis LaTeX.
+- Memudahkan dosen, asisten, dan mahasiswa dalam menyusun modul dan laporan.
+- Menjaga konsistensi format akademik antar dokumen praktikum.
+
+### Ruang Lingkup
+
+- Penyusunan modul praktikum per topik.
+- Penyusunan dokumen hands-on mahasiswa.
+- Pengelolaan referensi ilmiah menggunakan BibTeX.
+- Dokumentasi bukti eksperimen (gambar/screenshot) secara sistematis.
+
+### Target Pengguna
+
+- **Asisten Praktikum**: pengelolaan materi, hands-on, dan evaluasi hands-on.
+- **Mahasiswa**: penyusunan laporan praktikum sesuai template.
+
+---
+
+## 2. Repository Structure
+
+```text
+IF25-12007-Sistem-Operasi/
+├── README.md
+├── Modul Praktikum/
+│   ├── main.tex
+│   ├── config.sty
+│   ├── Referensi.bib
+│   ├── chapters/
+│   │   ├── modul_01.tex
+│   │   ├── ...
+│   │   └── modul_12.tex
+│   ├── Figure/
+│   │   ├── 00/ 01/ ... 12/
+│   │   └── ifitera-header.png
+│   └── %OUTDIR%/
+├── Hands-On/
+│   ├── main.tex
+│   ├── config.sty
+│   ├── Referensi.bib
+│   ├── chapters/
+│   │   ├── handson_01.tex
+│   │   ├── ...
+│   │   └── handson_06.tex
+│   ├── Figure/
+│   │   ├── 1/ 2/ ... 6/
+│   │   └── ifitera-header.png
+│   └── %OUTDIR%/
+└── Template Laporan/
+    ├── main.tex
+    ├── config.sty
+    ├── Referensi.bib
+    ├── chapters/
+    │   └── template.tex
+    ├── Figure/
+    │   └── ifitera-header.png
+    └── %OUTDIR%/
 ```
 
 ---
 
-## Prasyarat
+## 3. Document Structure
 
-Pastikan salah satu distribusi LaTeX berikut sudah terinstal:
+### A. Modul Praktikum
 
-- **TeX Live** (Linux/macOS/Windows) — [tug.org/texlive](https://tug.org/texlive/)
-- **MiKTeX** (Windows) — [miktex.org](https://miktex.org/)
-- **MacTeX** (macOS) — [tug.org/mactex](https://tug.org/mactex/)
+Setiap file `modul_XX.tex` mengikuti alur akademik:
+1. Tujuan dan Output Praktikum
+2. Dasar Teori
+3. Alat dan Bahan
+4. Langkah-Langkah Praktikum
 
-Atau gunakan editor online **Overleaf atau Crixet** tanpa instalasi lokal.
+Alur ini mendukung pembelajaran berbasis outcome dari teori ke praktik.
 
----
+### B. Hands-On
 
-## Cara Penggunaan
+Setiap `handson_XX.tex` dirancang untuk tugas mandiri praktikan.
 
-### 1. Isi Metadata di `config.sty`
+### C. Template Laporan
 
-Buka `Modul Praktikum/config.sty` dan ubah bagian **Identitas Mata Kuliah**:
-
-```latex
-\newcommand{\dosenPengampu}{Nama Dosen, S.T., M.T.}
-\newcommand{\labAssistantOne}{Nama Asisten Pertama}
-\newcommand{\labAssistantTwo}{Nama Asisten Kedua}
-\newcommand{\semester}{Genap 2025/2026}
-```
-
-Untuk Hands-On, mahasiswa juga mengisi bagian identitas:
-
-```latex
-\newcommand{\stuid}{12345678}
-\newcommand{\studentName}{Budi Santoso}
-\newcommand{\studyProgram}{Teknik Informatika}
-\newcommand{\practClass}{RA/RB/RC/RD/RE/RF/RG}
-```
-
-### 2. Isi Konten Tiap Modul
-
-Buka file `chapters/modul_XX.tex` yang ingin dikerjakan dan ganti semua `TODO` serta `\lipsum[...]`.
-
-Setiap file modul berisi satu `\chapter` dengan section:
-- Tujuan dan Output Praktikum
+`Template Laporan/chapters/template.tex` memuat struktur laporan akademik lengkap:
+- Pendahuluan
 - Dasar Teori
 - Alat dan Bahan
-- Langkah-Langkah Praktikum
+- Langkah-Langkah
+- Pembahasan
+- Kesimpulan
+- Lampiran penggunaan AI
 
-Gunakan **Find in Files** untuk menemukan semua bagian yang perlu diisi:
+---
 
+## 4. How to Compile
+
+### Prasyarat
+
+Gunakan salah satu distribusi LaTeX:
+- TeX Live
+- MiKTeX
+- MacTeX
+
+Atau editor online seperti Overleaf atau Prism.
+
+### Opsi 1 - `latexmk` (disarankan)
+
+```bash
+latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
 ```
-VS Code: Ctrl+Shift+F  →  ketik: TODO
+
+### Opsi 2 - `pdflatex` + `bibtex`
+
+```bash
+pdflatex main.tex
+bibtex main
+pdflatex main.tex
+pdflatex main.tex
 ```
 
-### 3. Tambahkan Gambar
+### Kompilasi per dokumen
 
-Letakkan gambar di `Figure/XX/` (sesuai nomor modul) lalu sisipkan di chapter:
+Jalankan per folder:
+- `Modul Praktikum/main.tex`
+- `Hands-On/main.tex`
+- `Template Laporan/main.tex`
+
+### Overleaf
+
+1. Unggah seluruh isi folder target (misalnya `Modul Praktikum/`).
+2. Set `Main document` ke `main.tex`.
+3. Klik **Compile**.
+
+---
+
+## 6. Writing Guidelines
+
+### Menambah modul/chapter baru
+
+- Buat file baru di `chapters/` dengan pola nama `modul_XX.tex` atau `handson_XX.tex`.
+- Tambahkan `\input{chapters/nama_file}` di `main.tex`.
+
+### Menambah referensi
+
+- Tambahkan entri BibTeX di `Referensi.bib`.
+- Sitasi di teks dengan `\cite{key}`.
+- Gunakan gaya sitasi yang sudah ditetapkan (`IEEEtran`).
+
+### Menambah gambar
+
+- Simpan gambar pada folder `Figure/XX/` sesuai modul.
+- Gunakan format berikut:
 
 ```latex
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=0.8\textwidth]{Figure/01/nama_gambar.png}
-    \caption{Keterangan gambar}
-    \label{fig:m01-label-unik}
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.75\textwidth]{Figure/XX/nama-gambar.png}
+  \caption{Caption informatif dan ringkas}
+  \label{fig:mXX-nama-gambar}
 \end{figure}
 ```
 
-### 4. Tambahkan Referensi
+### Menambah tabel
 
-Edit `Referensi.bib` dan tambahkan entri BibTeX, lalu sitasi di teks:
-
-```latex
-Menurut \cite{Silberschatz2018}, sistem operasi adalah...
-```
-
-### 5. Compile PDF
-
-Semua modul dikompilasi menjadi **satu dokumen PDF**.
-
-**Terminal (lokal):**
-
-```bash
-cd "Modul Praktikum"
-pdflatex main.tex && bibtex main && pdflatex main.tex && pdflatex main.tex
-```
-
-Atau dengan `latexmk`:
-
-```bash
-latexmk -pdf main.tex
-```
-
-**Overleaf:**
-1. Upload seluruh isi folder `Modul Praktikum/` ke proyek baru (pertahankan struktur folder).
-2. Set **Main document** ke `main.tex` → klik **Compile**.
-
-**VS Code:**
-Install ekstensi [LaTeX Workshop](https://marketplace.visualstudio.com/items?itemName=James-Yu.latex-workshop), buka `main.tex`, tekan `Ctrl+Alt+B`.
+- Gunakan caption yang menjelaskan isi tabel.
+- Letakkan `\label` setelah `\caption`.
+- Gunakan prefix label yang konsisten (`tab:`).
 
 ---
 
-## Konvensi Penamaan Label
+## 7. Key Notes / Conventions
 
-Label diberi prefix `mXX-` untuk menghindari konflik antar modul.
+### Konvensi penamaan file
 
-| Tipe | Prefix | Contoh |
-|------|--------|--------|
-| Chapter | `chap:` | `\label{chap:modul-01}` |
-| Section | `sec:` | `\label{sec:m01-persiapan}` |
-| Figure | `fig:` | `\label{fig:m01-sesi1}` |
-| Table | `tab:` | `\label{tab:m01-dasar-teori}` |
-| Code listing | `kode:` | `\label{kode:m01-bash-loop}` |
+- Modul: `modul_01.tex`, `modul_02.tex`, dan seterusnya.
+- Hands-on: `handson_01.tex`, `handson_02.tex`, dan seterusnya.
+- Gambar: gunakan nama deskriptif, misalnya `setup-virtualbox.png`, bukan `gambar1.png`.
+
+### Konvensi label
+
+Disarankan:
+- Chapter: `chap:modul-xx`
+- Section: `sec:mxx-topik`
+- Figure: `fig:mxx-topik`
+- Table: `tab:mxx-topik`
+- Listing: `kode:mxx-topik`
 
 ---
 
