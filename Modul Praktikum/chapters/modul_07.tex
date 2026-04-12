@@ -125,92 +125,11 @@ sudo usermod -aG docker $USER
     \textit{Catatan: \textit{Restart} atau \textit{relog} Terminal Anda agar perubahan perizinan grup ini langsung terbaca.}
 \end{enumerate}
 
-\subsection{Persiapan 2: Repositori dan Konstruksi Image Docker}
-\label{sec:m07-persiapan-docker}
-Praktikan diwajibkan memiliki repositori \textit{image} Docker Hub mandiri agar proses otomasi \textit{cross-compiling} berjalan lancar.
-\begin{enumerate}
-    \item Lakukan \textit{clone} repositori \textbf{Starter Code} (\url{https://github.com/Aziz097/starter-code-os32}) ke direktori lokal memori Anda.
-    \item Daftar akun di \url{https://hub.docker.com/}, lalu buat repositori baru bernama \texttt{ifos-env} dengan pilihan \textbf{Public}. Catat nama \textit{username} pendaftaran Anda.
-    \item Buka Terminal/PowerShell, posisikan direktori masuk (menggunakan perintah \texttt{cd}) ke dalam folder akar \texttt{starter-code-os32-main}.
-    \item Autentikasi koneksi ke dalam Docker Hub mesin Anda menggunakan instruksi berikut:
-    \begin{lstlisting}[language=bash, caption={Login ke Docker Hub}]
-docker login
-    \end{lstlisting}
-
-    \begin{figure}[!ht]
-        \centering
-        \includegraphics[width=0.9\textwidth]{Figure/07/2.png}
-        \caption{Tangkapan layar untuk perintah \texttt{docker login}}
-        \label{fig:m07-docker-login}
-    \end{figure}
-
-    \item Aktifkan modul \textit{multi-arch builder} di mesin Anda menggunakan instruksi berikut:
-    \begin{lstlisting}[language=bash, caption={Aktivasi dukungan multi-arsitektur}]
-docker run --privileged --rm tonistiigi/binfmt --install all
-    \end{lstlisting}
-
-    \begin{figure}[!ht]
-        \centering
-        \includegraphics[width=0.9\textwidth]{Figure/07/3.png}
-        \caption{Tangkapan layar saat instalasi dukungan binfmt multi-arsitektur}
-        \label{fig:m07-docker-binfmt}
-    \end{figure}
-
-    \item Buat ruang \textit{builder} baru khusus untuk multi-arsitektur:
-    \begin{lstlisting}[language=bash, caption={Membangun dan menggunakan Docker buildx builder baru}]
-docker buildx create --use --name multiarch-builder
-    \end{lstlisting}
-
-    \begin{figure}[!ht]
-        \centering
-        \includegraphics[width=0.9\textwidth]{Figure/07/4.png}
-        \caption{Tangkapan layar saat membuat builder multiarch-builder}
-        \label{fig:m07-docker-create}
-    \end{figure}
-
-    \item Verifikasi bahwa \textit{builder} telah berhasil disiapkan dan dapat mulai digunakan:
-    \begin{lstlisting}[language=bash, caption={Inspeksi dan bootstrap configurasi builder Docker}]
-docker buildx inspect --bootstrap
-    \end{lstlisting}
-
-    \begin{figure}[!ht]
-        \centering
-        \includegraphics[width=0.9\textwidth]{Figure/07/5.png}
-        \caption{Tangkapan layar saat mematangkan inisialisasi lingkungan \textit{buildx}}
-        \label{fig:m07-docker-inspect}
-    \end{figure}
-
-    \item Susun (\textit{build}) dan langsung distribusikan (\textit{push}) arsitektur lingkungan lintas platform ke repositori \textit{online} Anda (ubah parameter teks \texttt{nama\_akun\_anda} disesuaikan dengan \textit{username} asli):
-    \begin{lstlisting}[language=bash, caption={Build serentak dan pendistribusian file di image Docker}]
-docker buildx build \
-  --platform linux/amd64,linux/arm64 \
-  -t nama_akun_anda/ifos-env:latest \
-  --push \
-  .
-    \end{lstlisting}
-
-    \begin{figure}[!ht]
-        \centering
-        \includegraphics[width=0.9\textwidth]{Figure/07/6.png}
-        \caption{Proses penyusunan spesifikasi multi-arsitektur berserta log terminal \textit{push image} Docker Hub}
-        \label{fig:m07-docker-build}
-    \end{figure}
-\end{enumerate}
-
-\subsection{Persiapan 3: Menjalankan Mesin Terisolasi}
+\subsection{Persiapan 2: Menjalankan Mesin Terisolasi}
 \label{sec:m07-persiapan-env}
 Langkah ini menyiapkan ruang kerja terisolasi agar \textit{tools} kompilasi dan dependensi sistem operasi tidak mengotori mesin \textit{host} (laptop) Anda.
 \begin{enumerate}
-    \item Buka berkas \texttt{run-docker.sh} dengan IDE/teks editor Anda dan rekayasa nilai batas dari variabel \texttt{IMAGE\_REMOTE} mengikuti rujukan format akun Anda: \texttt{"<nama\_akun\_anda>/ifos-env:latest"}.
-
-    \begin{figure}[!ht]
-        \centering
-        \includegraphics[width=0.85\textwidth]{Figure/07/7.png}
-        \caption{Mengubah nilai konfigurasi variabel \texttt{IMAGE\_REMOTE} mengikuti tautan \textit{username image} Docker Hub praktikan}
-        \label{fig:m07-nano-rundocker}
-    \end{figure}
-
-    \item Masih di posisi terminal pada \textit{folder} yang sama, terjun ke mode simulasi lingkungan dengan mengeksekusi \textit{script runner}-nya:
+    \item Buka terminal, pastikan posisi Anda sudah berada di dalam folder proyek \texttt{starter-code-os32-main}, lalu terjun ke mode simulasi lingkungan dengan mengeksekusi \textit{script runner}-nya:
     \begin{lstlisting}[language=bash, caption={Perintah meluncurkan container Docker}]
 # Di sistem Windows (menggunakan Git Bash/WSL) atau Linux/macOS:
 ./run-docker.sh
