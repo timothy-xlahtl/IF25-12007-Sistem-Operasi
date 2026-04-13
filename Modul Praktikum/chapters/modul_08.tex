@@ -9,54 +9,59 @@
 \section{Tujuan dan Output Praktikum}
 
 \subsection{Tujuan Praktikum}
-Setelah menyelesaikan praktikum ini, mahasiswa diharapkan mampu:
+Tujuan yang diharapkan dapat dicapai oleh mahasiswa adalah:
 \begin{enumerate}
-    \item Tujuan praktikum pertama.
-    \item Tujuan praktikum kedua.
-    \item Tujuan praktikum ketiga.
-    \item Tujuan praktikum keempat.
+    \item Memahami arsitektur perangkat lunak dalam manajemen \textit{thread} (termasuk abstraksi \textit{Thread Control Block}) dan algoritma penjadwalan (\textit{scheduling}) pada tingkat inti sistem operasi (\textit{kernel-level}).
+    \item Mempraktikkan implementasi logika \textit{Context Switching} untuk memfasilitasi eksekusi \textit{multi-threading} melalui penyimpanan dan pemuatan status register CPU (memanfaatkan manipulasi bahasa tingkat rendah/Assembly).
 \end{enumerate}
 
 \subsection{Output Praktikum}
-Pada akhir praktikum ini, mahasiswa diharapkan menghasilkan:
+Hasil luaran yang diekspektasikan adalah kelengkapan instrumen berikut:
 \begin{itemize}
-    \item Output pertama yang diharapkan.
-    \item Output kedua yang diharapkan.
-    \item Output ketiga yang diharapkan.
+    \item Implementasi fungsional dari modifikasi berkas sumber (khususnya penyesuaian pada logika \texttt{thread.c}, \texttt{switch.asm}, dan \texttt{scheduler.h}) yang terbukti mampu mengompilasi rekayasa antrean \textit{thread}.
+    \item Tangkapan layar (\textit{screenshot}) keluaran terminal dari emulator QEMU yang memvalidasi bahwa beberapa \textit{thread} (contoh: Thread A, B, dan C) sukses berjalan saling bergantian secara sinkron mengambil alih siklus CPU.
 \end{itemize}
 
 % --- 2. Dasar Teori ---
 \newpage
 \section{Dasar Teori}
 
-\subsection{Sub-Teori Pertama}
-\lipsum[2]
+\subsection{Pengenalan Thread dan Multi-threading}
+Dalam sistem komputasi, \textit{thread} adalah unit instruksi terkecil yang dapat dijadwalkan oleh sistem operasi \cite{Silberschatz2018}. Jika sebuah proses diibaratkan sebagai program yang sedang berjalan dan memiliki memori sendiri, maka \textit{thread} adalah entitas eksekusi operasional di dalam proses tersebut. Lingkungan OS \textit{bare-metal} merintis kerangka \textit{multi-threading} agar dapat mensimulasikan penanganan banyak fungsi bahasa C secara bersamaan (konkurensi) \cite{pintos_stanford}. Secara konseptual, rutinitas pembuatan dan pengelolaan \textit{thread} dikonstruksi guna mendistribusikan beban kerja secara seimbang sehingga mendongkrak efisiensi utilitas prosesor.
 
-\subsection{Sub-Teori Kedua}
-\lipsum[3]
+\subsection{Konteks Eksekusi dan Context Switching}
+Konteks eksekusi merujuk pada seluruh status kumpulan register dari prosesor (seperti EAX, EBX, EBP, dan ESP pada perangkat arsitektur x86) yang dikenakan oleh sebuah \textit{thread} pada momentum waktu tertentu \cite{bryant2015computer}. Ketika sistem operasi hendak memberhentikan satu \textit{thread} lalu beralih ke giliran antrean eksekusi milik \textit{thread} yang lain, OS wajib menukarkan keadaannya lewat taktik perpindahan \textit{Context Switching}.
 
-\subsubsection{Sub-Sub-Teori A}
-\lipsum[4]
+Karena kerumitan modifikasi letak tumpukan memori (\textit{stack}) amat bergantung pada wujud arsitektur silikon sistem biner, prosedur krusial ini umumnya direpresentasikan murni melalui arahan instruksi pada level \textit{Assembly}. Operasi tersebut mutlak ditugaskan untuk mengekstrak simpanan (\textit{Push}) dari *thread* lama seraya mengangkat muatan register (\textit{Pop}) profil milik antrean *thread* pengganti.
 
-\subsubsection{Sub-Sub-Teori B}
-\lipsum[5]
+\subsection{Thread Control Block / TCB}
+Agar sistem pengontrol sanggup menjaga identitas serta alokasi titik perhentian terakhir masing-masing \textit{thread}, direkayasa sebuah skema pelacak terstruktur dinamakan \textit{Thread Control Block} (TCB) \cite{Silberschatz2018}. Menggunakan struktur data mandiri (seperti halnya tipe rekaman mendasar pada bahasa C), blok TCB secara dedikatif membungkus parameter-parameter memori berikut:
+\begin{itemize}
+    \item \textbf{Thread ID}: Angka unit unik pengenal subyek yang tak boleh identik.
+    \item \textbf{Status Thread}: Peta kondisi berjalannya instruksi pada suatu \textit{thread} (contoh: status sedang fasif siap diterjunkan/\textit{Ready}, status mandek/\textit{Blocked}, atau sedang berjalan/\textit{Running}).
+    \item \textbf{Stack Pointer (ESP)}: Penunjuk referensi baris alamat terakhir yang terekam pada tumpukan (\textit{stack}) ketika interupsi perpindahan prosesnya berlangsung.
+\end{itemize}
 
-\subsection{Sub-Teori Ketiga}
-\lipsum[6]
+\subsection{Algoritma Penjadwalan (Scheduling)}
+Siklus perancangan eksekusi CPU dikoordinasi secara tersentralisasi oleh modul OS benama \textit{Scheduler} \cite{Silberschatz2018}. Esensi utama dari algoritma komponen ini bertugas menyeleksi manakah prioritas \textit{thread} yang menduduki gerbang \textit{Ready} pada antrean sistem, agar mendapat wewenangnya dialihkan ke tingkatan fase \textit{Running}. Konsep paradigma fundamental penyeleksian dijabarkan melalui dua cara:
+\begin{enumerate}
+    \item \textbf{Cooperative Scheduling}: Sebuah \textit{thread} secara sadar membiarkan algoritma lain ganti mengeksekusi CPU dengan inisiatifnya menyerah (seperti metode inkuiri \texttt{yield()} atau tertahan menunggu sumber daya antarmuka selesai).
+    \item \textbf{Preemptive Scheduling}: Sistem operasi menyetel batasan pencacah peranti keras layaknya \textit{Timer Interrupt}, berfungsi untuk merampas status dominasi algoritma tanpa ampun dari instruksi \textit{thread} yang sedang menduduki memori apakala batasan waktunya telah dirasa mencukupi.
+\end{enumerate}
 
-Tabel \ref{tab:m08-dasar-teori} merangkum hal-hal penting terkait teori di atas.
+Tabel \ref{tab:m08-dasar-teori} memberikan intisari terminologi vital terkait landasan teori \textit{multithreading}.
 
-\begin{table}[h]
-\caption{Tabel Ringkasan Dasar Teori}
+\begin{table}[!ht]
+\caption{Tabel Ringkasan Dasar Teori Multi-threading}
 \label{tab:m08-dasar-teori}
 \centering
 \begin{tabulary}{\textwidth}{|L|L|}
 \hline
 \textbf{Konsep} & \textbf{Penjelasan Singkat} \\ \hline
-Konsep A        & \textit{TODO: isi penjelasan} \\ \hline
-Konsep B        & \textit{TODO: isi penjelasan} \\ \hline
-Konsep C        & \textit{TODO: isi penjelasan} \\ \hline
-Konsep D        & \textit{TODO: isi penjelasan} \\ \hline
+Thread & Unit eksekusi fungsional terkecil di dalam OS. \\ \hline
+Context Switch & Tindakan rekam-simpan silang arsitektur register satu \textit{thread} dengan \textit{thread} cadangan lainnya. \\ \hline
+TCB & Struktur blok tipe data spesifik pengingat status profil \textit{thread}. \\ \hline
+Scheduler & Organ algoritma OS yang mendikte hak pembagian waktu kendali CPU atas \textit{thread}. \\ \hline
 \end{tabulary}
 \end{table}
 
@@ -67,78 +72,132 @@ Konsep D        & \textit{TODO: isi penjelasan} \\ \hline
 
 \subsection{Perangkat Keras}
 \begin{itemize}
-    \item Spesifikasi perangkat keras pertama.
-    \item Spesifikasi perangkat keras kedua.
+    \item PC atau Laptop dengan arsitektur prosesor basis \textit{host} x86/x64 yang mendukung kelanjutan kompilasi emulator.
+    \item Memori minimal 4GB RAM ruang eksekusi.
 \end{itemize}
 
-\subsection{Perangkat Lunak}
+\subsection{Perangkat Lunak (Bahan Praktikum)}
 \begin{itemize}
-    \item Perangkat lunak pertama beserta versinya.
-    \item Perangkat lunak kedua beserta versinya.
-    \item Perangkat lunak ketiga beserta versinya.
+    \item OS \textit{Host} utama (Windows dengan WSL/GitBash, Linux, atau macOS).
+    \item Text Editor (misalnya Visual Studio Code) untuk menyunting berkas kode bahasa C dan \textit{Assembly}.
+    \item Instalasi Docker Engine (\texttt{docker.io}) untuk menyalakan lingkungan isolasi kompilasi.
+    \item Emulator piranti keras x86: \texttt{qemu-system-x86} (atau instalasi QEMU setara) yang akan mengeksekusi binari hasil rakitan OS.
+    \item Direktori \textit{Starter Code} OS 32-bit yang sudah disiapkan sebelumnya (berisi direktori \texttt{src} dengan kerangka lengkap \texttt{kernel.c}, \texttt{thread.h}, \texttt{thread.c}, \texttt{switch.asm}, \texttt{scheduler.h}, dsb).
 \end{itemize}
 
 % --- 4. Langkah-Langkah Praktikum ---
 \newpage
 \section{Langkah-Langkah Praktikum}
 
-\subsection{Persiapan Lingkungan}
-\label{sec:m08-persiapan}
-\lipsum[7]
-
-\begin{enumerate}
-    \item Langkah persiapan pertama.
-    \item Langkah persiapan kedua.
-    \begin{lstlisting}[language=bash, caption={Perintah verifikasi lingkungan}]
-# TODO: ganti dengan perintah sesungguhnya
-echo "Lingkungan siap"
-    \end{lstlisting}
-\end{enumerate}
-
-\subsection{Sesi 1: Nama Sesi Pertama}
+\subsection{Sesi 1: Persiapan Lingkungan Kerja}
 \label{sec:m08-sesi-1}
-\lipsum[8]
+Langkah pertama adalah menyiapkan direktori \textit{Starter Code} dan masuk ke dalam kontainer Docker.
 
 \begin{enumerate}
-    \item Langkah pertama sesi ini.
-    \begin{lstlisting}[language=bash, caption={Perintah sesi pertama}]
-# TODO: ganti dengan perintah sesungguhnya
-perintah --opsi argumen
+    \item Buka terminal dan pastikan Anda berada di dalam folder \texttt{starter-code-os32-main}.
+    \item Masuk ke lingkungan Docker dengan menjalankan perintah:
+    \begin{lstlisting}[language=bash, caption={Masuk ke lingkungan kontainer}]
+./run-docker.sh
     \end{lstlisting}
-
-    \item Langkah kedua sesi ini.
-    \begin{lstlisting}[language=bash, caption={Perintah lanjutan}]
-# TODO: ganti dengan perintah sesungguhnya
-perintah_lanjutan
-    \end{lstlisting}
+    \item Buka berkas \texttt{src/thread.c} pada teks editor. Berkas ini adalah file utama yang akan dimodifikasi.
 \end{enumerate}
 
-\begin{figure}[h]
-    \centering
-    % TODO: ganti dengan screenshot hasil praktikum
-    \includegraphics[width=0.75\textwidth]{Figure/ifitera-header.png}
-    \caption{Hasil Sesi 1 --- TODO: ganti caption}
-    \label{fig:m08-sesi1}
-\end{figure}
-
-\subsection{Sesi 2: Nama Sesi Kedua}
+\subsection{Sesi 2: Implementasi Fungsi \texttt{thread\_create()}}
 \label{sec:m08-sesi-2}
-\lipsum[9]
+Fungsi \texttt{thread\_create()} bertugas menyiapkan \textit{Thread Control Block} (TCB) dan \textit{stack} awal untuk \textit{thread} baru. Buka \texttt{thread.c}, cari fungsi pengisian \texttt{thread\_create}, dan ikuti langkah berikut:
 
 \begin{enumerate}
-    \item Langkah pertama sesi kedua.
-    \item Langkah kedua sesi kedua.
-    \begin{lstlisting}[language=bash, caption={Perintah sesi kedua}]
-# TODO: ganti dengan perintah sesungguhnya
-perintah_sesi_dua
-    \end{lstlisting}
-    \item Langkah ketiga sesi kedua.
+    \item \textbf{Langkah 1 (Alokasi TCB):} Gunakan \texttt{allocate\_thread\_page()} untuk alokasi memori \textit{thread}. Jika berhasil, panggil \texttt{init\_thread(t, name, priority)} dan berikan ID dengan \texttt{t->tid = allocate\_tid()}.
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.8\textwidth]{Figure/08/1.png}
+        \caption{Implementasi Alokasi TCB pada fungsi thread\_create()}
+    \end{figure}
+    
+    \item \textbf{Langkah 2 (Frame 1 --- \texttt{kernel\_thread\_frame}):} Buat variabel \textit{frame} ini menggunakan \texttt{alloc\_frame()}. Isi \texttt{eip} dengan \texttt{NULL}, lalu isi \texttt{function} dan \texttt{aux} sesuai dengan argumen parameter yang dikirim.
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.8\textwidth]{Figure/08/2.png}
+        \caption{Implementasi Frame 1 pada fungsi thread\_create()}
+    \end{figure}
+    
+    \item \textbf{Langkah 3 (Frame 2 --- \texttt{switch\_entry\_frame}):} Buat variabel \textit{frame} ini dengan alokasi di bawah Frame 1. Isi \texttt{eip} dengan memanggil alamat fungsi \texttt{kernel\_thread}.
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.8\textwidth]{Figure/08/3.png}
+        \caption{Implementasi Frame 2 pada fungsi thread\_create()}
+    \end{figure}
+    
+    \item \textbf{Langkah 4 (Frame 3 --- \texttt{switch\_threads\_frame}):} Buat variabel \textit{frame} terbawah ini. Isi variabel \texttt{eip} dengan \texttt{switch\_entry}, lalu set nilai \texttt{ebp}, \texttt{ebx}, \texttt{esi}, dan \texttt{edi} menjadi \texttt{0}.
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.8\textwidth]{Figure/08/4.png}
+        \caption{Implementasi Frame 3 pada fungsi thread\_create()}
+    \end{figure}
+    
+    \item \textbf{Langkah 5 (Penyelesaian):} Panggil \texttt{thread\_unblock(t)} agar dimasukkan ke dalam antrean \textit{ready}, kemudian lakukan \textit{return} id \textit{thread} tersebut (\texttt{t->tid}).
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.8\textwidth]{Figure/08/5.png}
+        \caption{Langkah Penyelesaian pada fungsi thread\_create()}
+    \end{figure}
+    
+    \item Pastikan kerangka utuh fungsi Anda menyerupai format referensi ini:
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.8\textwidth]{Figure/08/6.png}
+        \caption{Fungsi utuh \texttt{thread\_create()} secara keseluruhan}
+    \end{figure}
 \end{enumerate}
 
-\begin{figure}[h]
-    \centering
-    % TODO: ganti dengan screenshot hasil praktikum
-    \includegraphics[width=0.75\textwidth]{Figure/ifitera-header.png}
-    \caption{Hasil Sesi 2 --- TODO: ganti caption}
-    \label{fig:m08-sesi2}
-\end{figure}
+\subsection{Sesi 3: Implementasi Cooperative \textit{Round-Robin}}
+\label{sec:m08-sesi-3}
+Bagian ini mengatur agar \textit{thread} dapat saling bergantian menggunakan wewenang CPU. Masih di dalam file \texttt{thread.c}:
+
+\begin{enumerate}
+    \item \textbf{Modifikasi \texttt{thread\_yield()}:} Ambil \textit{thread} yang saat ini berjalan menggunakan \texttt{thread\_current()}. Ubah statusnya menjadi \texttt{THREAD\_READY}. Masukkan \textit{thread} ini ke dalam antrean \texttt{ready\_queue} pada indeks \texttt{ready\_tail}. Geser urutan \texttt{ready\_tail}, tambahkan jumlah \texttt{ready\_count}, dan akhiri dengan memanggil fungsi \texttt{schedule()}.
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.8\textwidth]{Figure/08/7.png}
+        \caption{Implementasi fungsi \texttt{thread\_yield()}}
+    \end{figure}
+
+    \item \textbf{Modifikasi \texttt{next\_thread\_to\_run()}:} Fungsi ini berjalan secara metode FIFO (\textit{First-In-First-Out}). Jika antrean kosong (\texttt{ready\_count} bernilai 0), kembalikan \texttt{initial\_thread}. Jika isi antrean tersedia, ambil \textit{thread} dari urutan depan (\texttt{ready\_queue[ready\_head]}), geser letak indeks depan \texttt{ready\_head}, kurangi nilai hitung \texttt{ready\_count}, lalu \textit{return thread} yang diambil tersebut.
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.8\textwidth]{Figure/08/8.png}
+        \caption{Implementasi fungsi \texttt{next\_thread\_to\_run()}}
+    \end{figure}
+\end{enumerate}
+
+\subsection{Sesi 4: Kompilasi dan Pengujian QEMU}
+\label{sec:m08-sesi-4}
+Setelah seluruh kode di \texttt{thread.c} selesai, jalankan pengujian sistem untuk membuktikan bahwa OS sudah sanggup menjalankan perpindahan waktu \textit{thread}.
+
+\begin{enumerate}
+    \item Buka kembali terminal yang berada di dalam lingkungan Docker, lalu jalankan perintah kompilasi:
+    \begin{lstlisting}[language=bash, caption={Perintah build pada terminal Docker}]
+make
+    \end{lstlisting}
+    \item Setelah proses kompilasi selesai (\textit{error} tidak muncul), jalankan QEMU emulator secara langsung menggunakan perintah di bawah ini:
+    \begin{lstlisting}[language=bash, caption={Menjalankan OS pada terminal Docker}]
+make run
+    \end{lstlisting}
+    \item Perhatikan layar simulator QEMU. Anda harus masuk dalam putaran sistem \textit{infinite loop} yang memperlihatkan ketiga \textit{thread} yang dibuat mencetak teks (Thread A, Thread B, dan Thread C) bergantian per waktu putaran:
+    \begin{lstlisting}[caption={Ekspektasi output sistem penjadwalan Thread di latar QEMU}]
+===================================
+  IF-OS  |  Praktikum Sistem Operasi
+===================================
+
+Inisialisasi sistem thread...
+Membuat thread A, B, C...
+Memulai scheduling...
+
+[Thread A] tick 0
+[Thread B] tick 0
+[Thread C] tick 0
+[Thread A] tick 1
+[Thread B] tick 1
+...
+    \end{lstlisting}
+\end{enumerate}

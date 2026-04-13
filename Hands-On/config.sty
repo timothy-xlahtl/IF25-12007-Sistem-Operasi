@@ -72,9 +72,9 @@
 \usepackage{fancyhdr}
 \fancypagestyle{main}{%
     \fancyhf{}%
-    \fancyhead[L]{\small\color{textsec}\studentName{} --- \stuid{}}%
+    \fancyhead[L]{\small\color{textsec}\courseName{} (\courseCode{})}%
     \fancyhead[R]{\small\color{textsec}\thepage}%
-    \fancyfoot[C]{\small\color{textsec}Hands-On Praktikum --- \courseName{}}%
+    \fancyfoot[C]{\small\color{textsec}Modul Praktikum --- \courseName{}}%
     \renewcommand{\headrulewidth}{0.4pt}%
     \renewcommand{\footrulewidth}{0pt}%
 }
@@ -161,7 +161,6 @@
 \usepackage{verbatim}
 \usepackage{lipsum}
 \usepackage{etoolbox}
-\usepackage[ddmmyyyy]{datetime}
 
 %%%%%%%%%%%%%%%%%%%%%%%%% PACKAGE ends HERE %%%%%%%%%%%%%%%%%%%%%%
 
@@ -172,17 +171,65 @@
 \newcommand{\courseCode}{IF25-12007}
 \newcommand{\semester}{Genap 2025/2026}
 \newcommand{\institution}{Institut Teknologi Sumatera}
+HEAD
 \newcommand{\dosenPengampu}{I Wayan Wiprayoga Wisesa, S.Kom., M.Kom.}
 \newcommand{\labAssistantOne}{Andryano Shevchenko Limbong}
 \newcommand{\labAssistantTwo}{Reza Chairul Manam}
 
-%%%%%%%%%%%%%%%%%%%%%%%%% Identitas Mahasiswa %%%%%%%%%%%%%%%%%%%%
-% Diisi oleh mahasiswa.
+36cfb28e5638747fbedfc01a2de81110202276b2
+
+% --- Dosen Pengampu ---
+\newcommand{\dosenPengampuI}{Martin Clinton Tosima Manullang, S.T., M.T., Ph.D.}
+\newcommand{\dosenPengampuII}{Ilham Firman Ashari, S.Kom., M.T}
+\newcommand{\dosenPengampuIII}{I Wayan Wiprayoga Wisesa, S.Kom., M.Kom.}
+\newcommand{\dosenPengampuIV}{Eko Dwi Nugroho, S.Kom., M.Cs.}
 
 \newcommand{\stuid}{124140104}
 \newcommand{\studentName}{Timothy Montoya Wilfried Mangapul Situngkir}
 \newcommand{\studyProgram}{Teknik Informatika}
 \newcommand{\practClass}{RE}
+% --- Asisten Praktikum ---
+\newcommand{\asistenNameI}{Ahmat Prayoga Sembiring}
+\newcommand{\asistenNimI}{123140053}
+
+\newcommand{\asistenNameII}{Andryano Shevchenko Limbong}
+\newcommand{\asistenNimII}{123140205}
+
+\newcommand{\asistenNameIII}{Aziz Kurniawan}
+\newcommand{\asistenNimIII}{122140097}
+
+\newcommand{\asistenNameIV}{Dito Rifki Irawan}
+\newcommand{\asistenNimIV}{122140153}
+
+\newcommand{\asistenNameV}{Ebentua Philippus Limbong}
+\newcommand{\asistenNimV}{123140086}
+
+\newcommand{\asistenNameVI}{Elsa Elisa Yohana Sianturi}
+\newcommand{\asistenNimVI}{122140135}
+
+\newcommand{\asistenNameVII}{Fathan Andi Kartagama}
+\newcommand{\asistenNimVII}{122140055}
+
+\newcommand{\asistenNameVIII}{Miftahul Khoiriyah}
+\newcommand{\asistenNimVIII}{123140064}
+
+\newcommand{\asistenNameIX}{Muhammad Bintang Al-Fasya}
+\newcommand{\asistenNimIX}{123140098}
+
+\newcommand{\asistenNameX}{Muhammad Fadhil Zurani}
+\newcommand{\asistenNimX}{122140146}
+
+\newcommand{\asistenNameXI}{Reza Chairul Manam}
+\newcommand{\asistenNimXI}{120140086}
+
+\newcommand{\asistenNameXII}{Stevanus Cahya Anggara}
+\newcommand{\asistenNimXII}{123140038}
+
+\newcommand{\asistenNameXIII}{Varasina Farmadani}
+\newcommand{\asistenNimXIII}{123140107}
+
+\newcommand{\asistenNameXIV}{Zakhi Algifari}
+\newcommand{\asistenNimXIV}{122140198}
 
 %%%%%%%%%%%%%%%%%%% Theorem-style Environments %%%%%%%%%%%%%%%%%%%%
 \newtheorem{thm}{Teorema}
@@ -193,10 +240,3 @@
 \newtheorem{coro}[thm]{Korolari}
 \newtheorem{quest}{Pertanyaan}[section]
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%%%%%%%%%%%%%% Shortcut for usual set of numbers %%%%%%%%%%%
-\newcommand{\N}{\mathbb{N}}
-\newcommand{\Z}{\mathbb{Z}}
-\newcommand{\Q}{\mathbb{Q}}
-\newcommand{\R}{\mathbb{R}}
-\newcommand{\C}{\mathbb{C}}

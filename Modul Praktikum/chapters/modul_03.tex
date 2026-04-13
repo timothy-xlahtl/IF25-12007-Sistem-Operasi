@@ -74,6 +74,33 @@ Untuk mengubah izin ini, digunakan perintah \texttt{chmod}. Selain menggunakan h
 
 Sementara itu, untuk mengubah pemilik dari sebuah file, sistem menggunakan perintah \texttt{chown}.
 
+\vspace{0.5em}
+\noindent\textbf{Membaca Output \texttt{ls -l}}
+
+Perintah \texttt{ls -l} menampilkan detail lengkap setiap berkas. Contoh outputnya adalah:
+
+\begin{lstlisting}[language=bash]
+-rw-r--r-- 1 user group 1024 Jan  1 10:00 namaberkas.txt
+\end{lstlisting}
+
+Kolom pertama (\texttt{-rw-r--r--}) adalah \textit{permission string} 10 karakter yang dibaca dari kiri ke kanan:
+
+\begin{table}[H]
+    \caption{Breakdown \textit{Permission String} pada Output \texttt{ls -l}}
+    \label{tab:ls-l-breakdown}
+    \centering
+    \begin{tabular}{|c|c|l|}
+        \hline
+        \textbf{Posisi} & \textbf{Contoh} & \textbf{Keterangan} \\ \hline
+        1 & \texttt{-} & Tipe berkas: \texttt{-} = berkas biasa, \texttt{d} = direktori \\ \hline
+        2--4 & \texttt{rw-} & Hak akses \textit{Owner}: \texttt{r}=baca, \texttt{w}=tulis, \texttt{-}=tanpa eksekusi \\ \hline
+        5--7 & \texttt{r--} & Hak akses \textit{Group}: hanya baca \\ \hline
+        8--10 & \texttt{r--} & Hak akses \textit{Others}: hanya baca \\ \hline
+    \end{tabular}
+\end{table}
+
+Huruf yang tampil menandakan izin aktif, sedangkan tanda \texttt{-} berarti izin tersebut tidak diberikan. Sebagai contoh, \texttt{rwxr-x---} berarti: \textit{owner} memiliki akses penuh (\texttt{rwx}), \textit{group} hanya bisa baca dan eksekusi (\texttt{r-x}), sementara \textit{others} tidak memiliki hak akses sama sekali (\texttt{---}).
+
 \subsection{Otorisasi \textit{Superuser}}
 Beberapa perintah krusial yang dapat mengubah sistem secara fatal memerlukan hak administratif (\textit{superuser} atau \textit{root}). Anda dapat membedakan status Anda saat ini melalui tanda \textit{prompt} pada terminal:
 \begin{itemize}
@@ -93,6 +120,8 @@ Tabel \ref{tab:m03-dasar-teori} merangkum berbagai perintah esensial yang akan d
         \hline
         \textbf{Perintah} & \textbf{Deskripsi Singkat} \\ \hline
         \texttt{ls} & Melihat daftar file dan folder di dalam direktori. \\ \hline
+        \texttt{ls -l} & Menampilkan daftar file beserta detail hak akses, pemilik, ukuran, dan tanggal modifikasi. \\ \hline
+        \texttt{ls -la} & Sama seperti \texttt{ls -l}, tetapi juga menampilkan berkas tersembunyi (\textit{hidden files}) yang diawali titik (\texttt{.}). \\ \hline
         \texttt{pwd} & Memeriksa \textit{path} atau alamat direktori saat ini. \\ \hline
         \texttt{cd} & Berpindah ke direktori lain. \\ \hline
         \texttt{mkdir} & Membuat direktori (folder) baru. \\ \hline
@@ -141,6 +170,10 @@ Berikut adalah tahapan-tahapan yang harus Anda selesaikan secara berurutan selam
         \begin{lstlisting}[language=bash, caption={Perintah memverifikasi lokasi direktori saat ini}]
     $ pwd
         \end{lstlisting}
+        Output yang dihasilkan adalah \textit{path} absolut direktori saat ini, misalnya:
+        \begin{lstlisting}[language=bash]
+    /home/namausername
+        \end{lstlisting}
         \begin{figure}[H]
             \centering
             \includegraphics[width=0.75\textwidth]{Figure/03/gambar1.png}
@@ -182,7 +215,12 @@ Berikut adalah tahapan-tahapan yang harus Anda selesaikan secara berurutan selam
         \begin{lstlisting}[language=bash, caption={Menampilkan isi berkas}]
     $ cat belajarlinux.txt
         \end{lstlisting}
-        
+        Isi berkas akan langsung tercetak di terminal. Contoh output sesuai data yang Anda masukkan:
+        \begin{lstlisting}[language=bash]
+    Nama: Budi Santoso
+    NIM: 12345678
+        \end{lstlisting}
+
         \item Buat direktori baru bernama \texttt{data2} dan salin berkas \texttt{belajarlinux.txt} ke dalamnya.
         \begin{lstlisting}[language=bash, caption={Menyalin berkas menggunakan cp}]
     $ mkdir data2
@@ -216,11 +254,21 @@ Berikut adalah tahapan-tahapan yang harus Anda selesaikan secara berurutan selam
     Pada tahap ini, Anda akan mencoba mengubah "kunci gembok" (\textit{permissions}) dari berkas yang sudah dibuat sebelumnya. 
     \begin{enumerate}
         \item Hapus hak akses baca (\textit{read}) dan tulis (\textit{write}) untuk pengguna asing (\textit{others}) pada berkas \texttt{belajarlagi.txt} dengan menggunakan parameter \texttt{o-rw}.
-        \begin{lstlisting}[language=bash, caption={Mengubah hak akses berkas}]
+        \begin{lstlisting}[language=bash, caption={Mengubah hak akses berkas (symbolic mode)}]
     $ chmod o-rw belajarlagi.txt
-    
+
     # Verifikasi perubahan hak akses, perhatikan deretan huruf di sebelah kiri
     $ ls -l
+        \end{lstlisting}
+
+        \noindent\textbf{Catatan — Mode Numerik (Oktal):} Perintah di atas menggunakan \textit{symbolic mode}. Perintah yang sama dapat ditulis dengan \textit{numeric mode} menggunakan angka oktal dari tabel \ref{tab:chmod-oktal}. Sebagai contoh, \texttt{chmod 640 belajarlagi.txt} memberikan efek yang setara:
+        \begin{itemize}
+            \item \textbf{6} (4+2) $\rightarrow$ \textit{Owner}: baca dan tulis (\texttt{rw-})
+            \item \textbf{4} $\rightarrow$ \textit{Group}: hanya baca (\texttt{r--})
+            \item \textbf{0} $\rightarrow$ \textit{Others}: tanpa akses (\texttt{---})
+        \end{itemize}
+        \begin{lstlisting}[language=bash, caption={Perintah yang setara menggunakan numeric mode}]
+    $ chmod 640 belajarlagi.txt
         \end{lstlisting}
         \begin{figure}[H]
             \centering
@@ -235,11 +283,20 @@ Berikut adalah tahapan-tahapan yang harus Anda selesaikan secara berurutan selam
             \label{fig:m03-gambar8}
         \end{figure}
         
-        \item Coba ubah kepemilikan berkas tersebut menjadi milik pengguna \texttt{root}. Karena ini merupakan tindakan administratif, Anda memerlukan perintah \texttt{sudo} di awal baris.
-        \begin{lstlisting}[language=bash, caption={Menggunakan sudo untuk mengubah owner}]
+        \item Coba ubah kepemilikan berkas tersebut menjadi milik pengguna \texttt{root}.
+
+        Operasi \texttt{chown} (change owner) mengubah siapa yang tercatat sebagai \textit{owner} dari sebuah berkas. Karena mengubah kepemilikan merupakan tindakan administratif yang berdampak pada keamanan sistem, perintah ini \textbf{memerlukan hak} \textit{superuser} dan harus dijalankan dengan \texttt{sudo}.
+        \begin{lstlisting}[language=bash, caption={Menggunakan sudo untuk mengubah owner ke root}]
     $ sudo chown root belajarlagi.txt
     $ ls -l
         \end{lstlisting}
+        Setelah perintah ini, kolom kepemilikan pada output \texttt{ls -l} akan berubah dari nama pengguna Anda menjadi \texttt{root}. Akibatnya, Anda \textbf{tidak lagi dapat mengedit} berkas tersebut tanpa menggunakan \texttt{sudo}, karena \textit{owner}-nya kini bukan Anda.
+
+        Untuk mengembalikan kepemilikan ke pengguna Anda sendiri, jalankan:
+        \begin{lstlisting}[language=bash, caption={Mengembalikan kepemilikan berkas ke pengguna semula}]
+    $ sudo chown $USER belajarlagi.txt
+        \end{lstlisting}
+        Variabel \texttt{\$USER} secara otomatis merujuk ke nama pengguna yang sedang aktif.
         \begin{figure}[H]
             \centering
             \includegraphics[width=0.75\textwidth]{Figure/03/gambar9.png}
@@ -249,3 +306,25 @@ Berikut adalah tahapan-tahapan yang harus Anda selesaikan secara berurutan selam
     \end{enumerate}
 
 \end{enumerate}
+
+% --- 5. Penanganan Kesalahan Umum ---
+\newpage
+\section{Penanganan Kesalahan Umum}
+\label{sec:m03-troubleshooting}
+
+Berikut adalah pesan kesalahan yang sering dijumpai selama praktikum beserta cara mengatasinya:
+
+\begin{table}[H]
+    \caption{Kesalahan Umum dan Cara Mengatasinya}
+    \label{tab:m03-troubleshooting}
+    \centering
+    \begin{tabular}{|p{5.5cm}|p{4cm}|p{4.5cm}|}
+        \hline
+        \textbf{Pesan Kesalahan} & \textbf{Penyebab Umum} & \textbf{Cara Mengatasi} \\ \hline
+        \texttt{Permission denied} & Anda tidak memiliki hak akses untuk membaca, menulis, atau menjalankan berkas tersebut. & Periksa permission dengan \texttt{ls -l}. Gunakan \texttt{chmod} untuk menyesuaikan, atau tambahkan \texttt{sudo} jika aksi memerlukan hak administratif. \\ \hline
+        \texttt{mkdir: cannot create directory 'data': File exists} & Direktori dengan nama yang sama sudah ada. & Gunakan nama direktori lain, atau hapus direktori lama terlebih dahulu dengan \texttt{rm -r namadir}. \\ \hline
+        \texttt{No such file or directory} & Berkas atau direktori yang dituju tidak ditemukan di \textit{path} yang diberikan. & Pastikan ejaan nama berkas benar. Gunakan \texttt{ls} untuk melihat isi direktori saat ini, dan \texttt{pwd} untuk mengecek lokasi Anda. \\ \hline
+        \texttt{sudo: command not found} & Perintah \texttt{sudo} tidak tersedia (jarang terjadi di Ubuntu). & Pastikan Anda menggunakan distribusi Ubuntu yang sudah dikonfigurasi. Hubungi asisten praktikum jika masalah berlanjut. \\ \hline
+        \texttt{bash: nano: command not found} & Editor \texttt{nano} belum terpasang. & Pasang dengan perintah \texttt{sudo apt install nano}. \\ \hline
+    \end{tabular}
+\end{table}

@@ -20,33 +20,63 @@
 \end{tikzpicture}
 \begin{center}
     \vspace*{4.5cm}
-    {\color{textsec}\large\MakeUppercase{\textls[120]{Hands-On Praktikum}}}\\[0.6cm]
+    {\color{textsec}\large\MakeUppercase{\textls[120]{Modul Praktikum}}}\\[0.6cm]
     {\color{accentdark}\fontsize{32}{38}\selectfont\bfseries\courseName{}}\\[0.3cm]
-    {\color{textsec}\Large \courseCode{} \,\textbar\, \semester{}}\\[1.5cm]
-    {\color{accent}\rule{0.35\textwidth}{2pt}}\\[1.5cm]
+    {\color{textsec}\Large \courseCode{} \,\textbar\, \semester{}}\\[1.8cm]
+    {\color{accent}\rule{0.35\textwidth}{2pt}}\\[1.8cm]
     \renewcommand{\arraystretch}{1.4}
     \begin{tabular}{@{} >{\color{textsec}}r @{\hspace{0.6cm}} l @{}}
         Mata Kuliah & \courseName{} (\courseCode{}) \\
         Semester    & \semester{}                   \\
         Institusi   & \institution{}                \\
-        Dosen       & \dosenPengampu{}              \\
-        Asisten     & \labAssistantOne{}            \\
-                    & \labAssistantTwo{}            \\
-    \end{tabular}\\[1cm]
-    {\color{accent}\rule{0.35\textwidth}{2pt}}\\[1cm]
-    {\color{textsec}\large\MakeUppercase{\textls[120]{Dikerjakan Oleh}}}\\[0.6cm]
-    \renewcommand{\arraystretch}{1.4}
-    \begin{tabular}{@{} >{\color{textsec}}r @{\hspace{0.6cm}} l @{}}
-        Nama            & \studentName{}  \\
-        NIM             & \stuid{}        \\
-        Kelas Praktikum & \practClass{}   \\
-        Program Studi   & \studyProgram{} \\
-        Tanggal         & \today{}        \\
     \end{tabular}
     \vfill
     {\color{textsec}\small\textcopyright{} \the\year{} --- \institution{}}\\[1.5cm]
 \end{center}
 \restoregeometry
+\newpage
+
+% ===== HALAMAN DOSEN & ASISTEN PRAKTIKUM =====
+\thispagestyle{empty}
+\begin{center}
+    \vspace*{1.2cm}
+    {\color{accentdark}\Large\bfseries\MakeUppercase{\textls[120]{Tim Pengajar \& Asisten}}}\\[0.2cm]
+    {\color{accent}\rule{0.3\textwidth}{1.5pt}}\\[0.8cm]
+
+    % --- Dosen Pengampu ---
+    {\color{accentdark}\large\bfseries Dosen Pengampu}\\[0.35cm]
+    \renewcommand{\arraystretch}{1.25}
+    \begin{tabular}{c}
+        \textcolor{textmain}{\dosenPengampuI{}}  \\
+        \textcolor{textmain}{\dosenPengampuII{}}   \\
+        \textcolor{textmain}{\dosenPengampuIII{}} \\
+        \textcolor{textmain}{\dosenPengampuIV{}}  \\
+    \end{tabular}
+
+    \vspace{0.6cm}
+    {\color{accent}\rule{0.15\textwidth}{0.8pt}}\\[0.6cm]
+
+    % --- Asisten Praktikum ---
+    {\color{accentdark}\large\bfseries Asisten Praktikum}\\[0.35cm]
+    \renewcommand{\arraystretch}{1.25}
+    \begin{tabular}{@{} l @{\hspace{1.5cm}} >{\color{textsec}}r @{}}
+        \textcolor{textmain}{\asistenNameI}      & \asistenNimI \\
+        \textcolor{textmain}{\asistenNameII}     & \asistenNimII \\
+        \textcolor{textmain}{\asistenNameIII}    & \asistenNimIII \\
+        \textcolor{textmain}{\asistenNameIV}     & \asistenNimIV \\
+        \textcolor{textmain}{\asistenNameV}      & \asistenNimV \\
+        \textcolor{textmain}{\asistenNameVI}     & \asistenNimVI \\
+        \textcolor{textmain}{\asistenNameVII}    & \asistenNimVII \\
+        \textcolor{textmain}{\asistenNameVIII}   & \asistenNimVIII \\
+        \textcolor{textmain}{\asistenNameIX}     & \asistenNimIX \\
+        \textcolor{textmain}{\asistenNameX}      & \asistenNimX \\
+        \textcolor{textmain}{\asistenNameXI}     & \asistenNimXI \\
+        \textcolor{textmain}{\asistenNameXII}    & \asistenNimXII \\
+        \textcolor{textmain}{\asistenNameXIII}   & \asistenNimXIII \\
+        \textcolor{textmain}{\asistenNameXIV}    & \asistenNimXIV \\
+    \end{tabular}
+    \vfill
+\end{center}
 \newpage
 
 % ===== DAFTAR ISI =====
@@ -60,9 +90,5 @@
 \input{chapters/handson_04}
 \input{chapters/handson_05}
 \input{chapters/handson_06}
-
-%%%%%%%%%%%%%%%%%%%%% REFERENSI %%%%%%%%%%%%%%%%%%%%%
-\bibliographystyle{IEEEtran}
-\bibliography{Referensi}
 
 \end{document}

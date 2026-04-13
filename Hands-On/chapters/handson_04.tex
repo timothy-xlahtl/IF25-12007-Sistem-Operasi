@@ -1,86 +1,435 @@
 % ============================================================
-%  Hands-On 4 — Automasi dengan Bash Scripting
+%  Hands-On 4 -- Implementasi Multi-threading
+%  Praktikum Sistem Operasi
 % ============================================================
 
 \chapter{Implementasi Multi-threading}
 \label{chap:handson-04}
 
-% --- 1. Tugas ---
-\section{Tugas}
+% ----------------------------------------------------------------
+\section{Tujuan}
 
-Jawablah pertanyaan-pertanyaan berikut berdasarkan hasil praktikum Anda.
-Sertakan bukti berupa \textit{screenshot} atau penggalan keluaran terminal
-yang relevan pada setiap jawaban.
+Jawablah pertanyaan-pertanyaan berikut berdasarkan hasil praktikum Anda
+sesuai urutan sesi pada Modul~8.
+Sertakan bukti berupa \textit{screenshot} atau penggalan keluaran
+terminal yang relevan pada setiap jawaban.
+
+% ----------------------------------------------------------------
+\section{Sesi 1 --- Persiapan Lingkungan Kerja}
+
+\subsection{Masuk ke Container Docker}
+
+Jalankan perintah berikut di terminal, kemudian masuk ke direktori
+\textit{workspace}:
+
+\begin{lstlisting}[language=bash, caption={Menjalankan container dan masuk workspace}]
+docker run --rm -it \
+    -v "C:\path\ke\starter-code:/workspace" \
+    sinanonym/ifos-env
+cd /workspace
+\end{lstlisting}
 
 \begin{enumerate}
-    \item \textbf{[Topik Pertanyaan 1]}\\
-    \textit{TODO: ganti dengan pertanyaan sesungguhnya.}\\[0.3cm]
+
+    \item \textbf{Compile starter code sebelum implementasi.}\\
+    Jalankan perintah berikut di dalam container:
+
+    \begin{lstlisting}[language=bash, caption={Perintah kompilasi awal}]
+make clean && make
+    \end{lstlisting}
+
+    Tuliskan seluruh \textit{warning} yang muncul pada saat kompilasi dan
+    jelaskan mengapa \textit{warning} tersebut muncul pada kode
+    \textit{stub}.\\[0.3cm]
     \textbf{Jawaban:}\\
     \textit{[Isi jawaban di sini]}
 
-    \item \textbf{[Topik Pertanyaan 2]}\\
-    \textit{TODO: ganti dengan pertanyaan sesungguhnya.}
-    \begin{enumerate}
-        \item[(a)] Sub-pertanyaan a.\\
-        \textbf{Jawaban:} \textit{[Isi jawaban di sini]}
-        \item[(b)] Sub-pertanyaan b.\\
-        \textbf{Jawaban:} \textit{[Isi jawaban di sini]}
-    \end{enumerate}
+    \item \textbf{Jalankan QEMU sebelum implementasi.}\\
+    Jalankan perintah berikut lalu sertakan \textit{screenshot} layar QEMU.
+    Jelaskan mengapa sistem berhenti di sana dan belum menampilkan
+    output Thread~A/B/C.
 
-    \item \textbf{[Topik Pertanyaan 3]}\\
-    \textit{TODO: ganti dengan pertanyaan sesungguhnya.}\\[0.3cm]
+    \begin{lstlisting}[language=bash, caption={Menjalankan emulator QEMU}]
+make run
+    \end{lstlisting}
+
+    \textbf{Screenshot:}
+    \begin{figure}[H]
+        \centering
+        \fbox{\begin{minipage}{0.92\linewidth}
+            \centering\vspace{2.5cm}
+            \textit{[Tempel screenshot layar QEMU di sini]}
+            \vspace{2.5cm}
+        \end{minipage}}
+        \caption{Tampilan QEMU sebelum implementasi}
+    \end{figure}
+
     \textbf{Jawaban:}\\
     \textit{[Isi jawaban di sini]}
 
-    \item \textbf{[Eksplorasi Mandiri]}\\
-    \textit{TODO: ganti dengan pertanyaan eksplorasi sesungguhnya.}\\[0.3cm]
-    \textbf{Jawaban:}\\
-    \textit{[Isi jawaban di sini]}
 \end{enumerate}
 
-% --- 2. Kesimpulan ---
-\newpage
-\section{Kesimpulan}
+% ----------------------------------------------------------------
+\section{Sesi 2 --- Implementasi \texttt{thread\_create()}}
 
-\noindent\textit{[TODO: Tuliskan kesimpulan dari praktikum yang telah dilaksanakan.
-Kesimpulan hendaknya menjawab tujuan-tujuan pada modul praktikum, minimal 2--3 paragraf.]}
+\subsection{Thread Control Block dan Layout Memori}
 
-% --- 3. Lampiran: Bukti Penggunaan AI ---
-\newpage
-\section{Lampiran: Bukti Penggunaan AI}
-\label{sec:h04-lampiran-ai}
+\begin{enumerate}
 
-Sesuai dengan kebijakan penggunaan kecerdasan buatan (AI) dalam kegiatan akademik,
-praktikan \textbf{wajib} mencantumkan setiap penggunaan alat bantu AI yang dilakukan
-selama pengerjaan hands-on ini. Ketidakjujuran dalam pelaporan penggunaan AI dianggap
-sebagai pelanggaran integritas akademik.
+    \item \textbf{Field-field \texttt{struct thread}.}\\
+    Perhatikan definisi \texttt{struct thread} di \texttt{src/thread.h}.
+    Isilah tabel berikut berdasarkan kode sumber.
 
-\subsection{Identitas Penggunaan AI}
-
-\begin{table}[h]
-\caption{Informasi Alat AI yang Digunakan}
-\label{tab:h04-ai-info}
-\centering
-\begin{tabulary}{\textwidth}{|L|L|}
-\hline
-\textbf{Keterangan}   & \textbf{Isian} \\ \hline
-Nama alat AI          & \textit{(contoh: ChatGPT, GitHub Copilot, Gemini, dst.)} \\ \hline
-Versi / Model         & \textit{(contoh: GPT-4o, Gemini 1.5 Pro, dst.)} \\ \hline
-Tanggal penggunaan    & \textit{TODO: isi tanggal} \\ \hline
-Tujuan penggunaan     & \textit{TODO: jelaskan secara singkat untuk apa AI digunakan} \\ \hline
-\end{tabulary}
-\end{table}
-
-\subsection{Tangkapan Layar Percakapan AI}
-
-Sertakan tangkapan layar (\textit{screenshot}) percakapan dengan AI sebagai
-bukti otentik. Setiap gambar harus memperlihatkan \textbf{prompt} yang dikirimkan
-dan \textbf{respons} yang diterima secara jelas.
-
-\begin{figure}[h]
+    \begin{table}[!ht]
+    \caption{Field-field pada \texttt{struct thread}}
+    \label{tab:h04-struct-thread}
     \centering
-    % TODO: ganti dengan screenshot percakapan AI Anda
-    \includegraphics[width=0.85\textwidth]{Figure/ifitera-header.png}
-    \caption{Tangkapan Layar Percakapan AI --- Sesi 1 (TODO: ganti caption)}
-    \label{fig:h04-ai-screenshot-1}
-\end{figure}
+    \begin{tabulary}{\linewidth}{|L|L|L|}
+    \hline
+    \textbf{Field} & \textbf{Tipe Data} & \textbf{Fungsi} \\
+    \hline
+    \texttt{tid}      & \texttt{tid\_t}              & \textit{[Isi]} \\
+    \hline
+    \texttt{status}   & \texttt{enum thread\_status} & \textit{[Isi]} \\
+    \hline
+    \texttt{name}     & \texttt{char[16]}            & \textit{[Isi]} \\
+    \hline
+    \texttt{stack}    & \texttt{uint8\_t *}          & \textit{[Isi]} \\
+    \hline
+    \texttt{priority} & \texttt{int}                 & \textit{[Isi]} \\
+    \hline
+    \texttt{magic}    & \texttt{unsigned}            & \textit{[Isi]} \\
+    \hline
+    \end{tabulary}
+    \end{table}
+
+    \item \textbf{Layout halaman 4~KB setiap thread.}\\
+    Setiap thread menempati satu halaman (\textit{page}) memori berukuran
+    4~KB. Isilah kolom \textit{Isi} pada tabel layout di bawah ini
+    untuk menggambarkan posisi \texttt{struct thread}, \textit{stack},
+    dan ketiga frame yang disiapkan oleh \texttt{thread\_create()}.
+
+    \begin{table}[!ht]
+    \caption{Layout halaman 4~KB milik sebuah thread}
+    \label{tab:h04-page-layout}
+    \centering
+    \begin{tabulary}{\linewidth}{|C|L|}
+    \hline
+    \textbf{Offset (relatif)} & \textbf{Isi} \\
+    \hline
+    \texttt{+4096} & \textit{[Isi: puncak halaman / ESP awal]} \\
+    \hline
+    \texttt{...}   & \texttt{switch\_threads\_frame} \\
+    \hline
+    \texttt{...}   & \texttt{switch\_entry\_frame} \\
+    \hline
+    \texttt{...}   & \texttt{kernel\_thread\_frame} \\
+    \hline
+    \texttt{...}   & \textit{[Isi: area stack kosong, tumbuh ke bawah ($\downarrow$)]} \\
+    \hline
+    \texttt{+0}    & \texttt{struct thread} (TCB) \\
+    \hline
+    \end{tabulary}
+    \end{table}
+
+    \item \textbf{Analisis fungsi \texttt{running\_thread()}.}\\
+    Perhatikan potongan kode berikut:
+
+    \begin{lstlisting}[language=c, caption={Implementasi \texttt{running\_thread()} di \texttt{src/thread.c}}]
+struct thread *running_thread(void) {
+    uint32_t esp;
+    __asm__ volatile ("mov %%esp, %0" : "=g" (esp));
+    return (struct thread *)(void *)(esp & ~(uint32_t)(PGSIZE - 1));
+}
+    \end{lstlisting}
+
+    \begin{enumerate}
+        \item[(a)] Jelaskan apa yang dilakukan operasi bitwise
+                   \texttt{esp \& \textasciitilde(PGSIZE - 1)} dan
+                   mengapa hasilnya selalu merupakan alamat awal
+                   \textit{page}.\\[0.3cm]
+                   \textbf{Jawaban:}\\
+                   \textit{[Isi jawaban di sini]}
+
+        \item[(b)] Mengapa teknik ini hanya benar jika
+                   \texttt{struct thread} selalu berada di offset~0
+                   dari halamannya? Apa dampaknya jika
+                   \texttt{initial\_thread\_page} di \texttt{boot.asm}
+                   tidak di-\textit{align} ke 4096~byte?\\[0.3cm]
+                   \textbf{Jawaban:}\\
+                   \textit{[Isi jawaban di sini]}
+
+        \item[(c)] Apa fungsi \texttt{THREAD\_MAGIC} dan bagaimana
+                   \texttt{thread\_current()} menggunakannya untuk
+                   mendeteksi \textit{stack overflow}?\\[0.3cm]
+                   \textbf{Jawaban:}\\
+                   \textit{[Isi jawaban di sini]}
+    \end{enumerate}
+
+\end{enumerate}
+
+\subsection{Implementasi Fungsi \texttt{thread\_create()}}
+
+\begin{enumerate}
+
+    \item \textbf{Tiga stack frame pada \texttt{thread\_create()}.}\\
+    Isilah tabel berikut berdasarkan komentar petunjuk di
+    \texttt{src/thread.c}.
+
+    \begin{table}[!ht]
+    \caption{Tiga stack frame yang disiapkan \texttt{thread\_create()}}
+    \label{tab:h04-stack-frames}
+    \centering
+    \begin{tabulary}{\linewidth}{|C|L|L|L|}
+    \hline
+    \textbf{Urutan push} & \textbf{Nama frame} &
+    \textbf{Field penting} & \textbf{Nilai yang diisi} \\
+    \hline
+    1 --- paling atas & \texttt{kernel\_\allowbreak thread\_\allowbreak frame} &
+        \texttt{eip}, \texttt{function}, \texttt{aux} &
+        \textit{[Isi]} \\
+    \hline
+    2 --- tengah & \texttt{switch\_\allowbreak entry\_\allowbreak frame} &
+        \texttt{eip} &
+        \textit{[Isi]} \\
+    \hline
+    3 --- paling bawah & \texttt{switch\_\allowbreak threads\_\allowbreak frame} &
+        \texttt{eip}, register \textit{callee-saved} &
+        \textit{[Isi]} \\
+    \hline
+    \end{tabulary}
+    \end{table}
+
+    \item \textbf{Alur eksekusi pertama thread baru.}\\
+    Saat thread baru \textbf{pertama kali} dijadwalkan melalui
+    \texttt{switch\_threads()}, jelaskan secara berurutan apa yang
+    terjadi mulai dari \texttt{switch\_entry} hingga fungsi thread
+    (\texttt{func\_a}, \texttt{func\_b}, atau \texttt{func\_c})
+    benar-benar mulai berjalan.\\[0.3cm]
+    \textbf{Jawaban:}\\
+    \textit{[Isi jawaban di sini]}
+
+    \item \textbf{Tulis implementasi \texttt{thread\_create()}.}\\
+    Salin kode yang telah Anda tulis di \texttt{src/thread.c}:
+
+    \begin{lstlisting}[language=c, caption={Implementasi \texttt{thread\_create()} oleh mahasiswa}]
+tid_t thread_create(const char *name, int priority,
+                    thread_func *function, void *aux) {
+
+    /* Tulis implementasi Anda di sini */
+
+}
+    \end{lstlisting}
+
+    \item \textbf{Penanganan kegagalan alokasi.}\\
+    Kapan \texttt{allocate\_thread\_page()} dapat mengembalikan
+    \texttt{NULL}, dan bagaimana \texttt{thread\_create()} harus
+    menanganinya?\\[0.3cm]
+    \textbf{Jawaban:}\\
+    \textit{[Isi jawaban di sini]}
+
+\end{enumerate}
+
+% ----------------------------------------------------------------
+\section{Sesi 3 --- Implementasi \textit{Cooperative Round-Robin}}
+
+\subsection{Konsep Status Thread}
+
+\begin{enumerate}
+
+    \item \textbf{Perbedaan \texttt{THREAD\_READY} dan
+    \texttt{THREAD\_BLOCKED}.}\\
+    Lengkapi tabel perbandingan berikut.
+
+    \begin{table}[!ht]
+    \caption{Perbandingan status \texttt{THREAD\_READY} dan \texttt{THREAD\_BLOCKED}}
+    \label{tab:h04-thread-status}
+    \centering
+    \begin{tabulary}{\linewidth}{|L|L|L|}
+    \hline
+    \textbf{Aspek} & \textbf{THREAD\_READY} & \textbf{THREAD\_BLOCKED} \\
+    \hline
+    Siapa yang menetapkan? & \textit{[Isi]} & \textit{[Isi]} \\
+    \hline
+    Masuk ke \textit{ready queue}? & \textit{[Isi]} & \textit{[Isi]} \\
+    \hline
+    Cara kembali ke \texttt{RUNNING} & \textit{[Isi]} & \textit{[Isi]} \\
+    \hline
+    Contoh penggunaan & \textit{[Isi]} & \textit{[Isi]} \\
+    \hline
+    \end{tabulary}
+    \end{table}
+
+\end{enumerate}
+
+\subsection{Implementasi Fungsi \textit{Scheduling}}
+
+\begin{enumerate}
+
+    \item \textbf{Tulis implementasi \texttt{thread\_yield()}.}\\
+    Salin kode yang telah Anda tulis di \texttt{src/thread.c}:
+
+    \begin{lstlisting}[language=c, caption={Implementasi \texttt{thread\_yield()} oleh mahasiswa}]
+void thread_yield(void) {
+
+    /* Tulis implementasi Anda di sini */
+
+}
+    \end{lstlisting}
+
+    \item \textbf{Tulis implementasi \texttt{next\_thread\_to\_run()}
+    (Round-Robin FIFO).}\\
+    Salin kode yang telah Anda tulis di \texttt{src/thread.c}:
+
+    \begin{lstlisting}[language=c, caption={Implementasi \texttt{next\_thread\_to\_run()} oleh mahasiswa}]
+struct thread *next_thread_to_run(void) {
+
+    /* Tulis implementasi Anda di sini */
+
+}
+    \end{lstlisting}
+
+    \item \textbf{Mengapa mengembalikan \texttt{initial\_thread},
+    bukan \texttt{NULL}?}\\
+    Jelaskan apa yang akan terjadi pada fungsi \texttt{schedule()} jika
+    \texttt{next\_thread\_to\_run()} mengembalikan \texttt{NULL} saat
+    antrian kosong.\\[0.3cm]
+    \textbf{Jawaban:}\\
+    \textit{[Isi jawaban di sini]}
+
+    \item \textbf{\texttt{thread\_block()} vs.\ \texttt{thread\_yield()}
+    di akhir \texttt{kernel\_main}.}\\
+    Jelaskan perbedaan perilaku kedua fungsi tersebut setelah Thread~A,
+    B, dan C berhasil dibuat, dan mengapa \texttt{thread\_block()}
+    adalah pilihan yang benar.\\[0.3cm]
+    \textbf{Jawaban:}\\
+    \textit{[Isi jawaban di sini]}
+
+\end{enumerate}
+
+% ----------------------------------------------------------------
+\section{Sesi 4 --- Kompilasi dan Pengujian QEMU}
+
+\begin{enumerate}
+
+    \item \textbf{Compile ulang setelah implementasi selesai.}
+
+    \begin{lstlisting}[language=bash, caption={Perintah build dan run setelah implementasi}]
+make clean && make && make run
+    \end{lstlisting}
+
+    Sertakan \textit{screenshot} layar QEMU yang menampilkan ketiga
+    thread berjalan bergantian.
+
+    \begin{figure}[H]
+        \centering
+        \fbox{\begin{minipage}{0.92\linewidth}
+            \centering\vspace{2.5cm}
+            \textit{[Tempel screenshot layar QEMU setelah implementasi di sini]}
+            \vspace{2.5cm}
+        \end{minipage}}
+        \caption{Tampilan QEMU setelah implementasi berhasil}
+    \end{figure}
+
+    \item \textbf{Verifikasi urutan penjadwalan.}\\
+    Ekspektasi keluaran sistem yang benar adalah sebagai berikut:
+
+    \begin{lstlisting}[caption={Ekspektasi output Round-Robin di layar QEMU}]
+===================================
+  IF-OS  |  Praktikum Sistem Operasi
+===================================
+
+Inisialisasi sistem thread...
+Membuat thread A, B, C...
+Memulai scheduling...
+
+[Thread A] tick 0
+[Thread B] tick 0
+[Thread C] tick 0
+[Thread A] tick 1
+[Thread B] tick 1
+[Thread C] tick 1
+...
+    \end{lstlisting}
+
+    Apakah urutan Thread~A $\to$ Thread~B $\to$ Thread~C $\to$
+    Thread~A $\to \ldots$ terjaga secara konsisten pada hasil Anda?
+    Jelaskan mengapa urutan ini dapat dijamin oleh implementasi FIFO
+    pada \textit{ready queue}.\\[0.3cm]
+    \textbf{Jawaban:}\\
+    \textit{[Isi jawaban di sini]}
+
+    \item \textbf{Analisis \textit{warning} compiler sebelum dan setelah
+    implementasi.}\\
+    Apakah \textit{warning} \texttt{unused-function} dan
+    \texttt{unused-variable} yang muncul sebelum implementasi masih
+    ada setelah Anda mengimplementasikan ketiga fungsi? Jelaskan
+    mengapa \textit{warning} tersebut hilang.\\[0.3cm]
+    \textbf{Jawaban:}\\
+    \textit{[Isi jawaban di sini]}
+
+\end{enumerate}
+
+% ----------------------------------------------------------------
+\section{Eksplorasi Mandiri}
+
+\begin{enumerate}
+
+    \item \textbf{Menambah Thread keempat.}\\
+    Tambahkan Thread~D dengan fungsi dan warna VGA berbeda di
+    \texttt{src/kernel.c}, kemudian compile ulang dan jalankan.
+
+    \begin{enumerate}
+        \item[(a)] Sertakan \textit{screenshot} layar QEMU yang
+                   menampilkan empat thread berjalan bergantian.
+
+        \begin{figure}[H]
+            \centering
+            \fbox{\begin{minipage}{0.92\linewidth}
+                \centering\vspace{2.5cm}
+                \textit{[Tempel screenshot empat thread di sini]}
+                \vspace{2.5cm}
+            \end{minipage}}
+            \caption{Tampilan QEMU dengan empat thread}
+        \end{figure}
+
+        \item[(b)] Berapa nilai \texttt{MAX\_THREADS} saat ini?
+                   Apa yang terjadi jika Anda membuat thread melebihi
+                   batas tersebut? Tunjukkan dengan percobaan dan
+                   sertakan bukti.\\[0.3cm]
+                   \textbf{Jawaban:}\\
+                   \textit{[Isi jawaban di sini]}
+    \end{enumerate}
+
+    \item \textbf{Simulasi \textit{finite thread}.}\\
+    Ubah \texttt{func\_a} di \texttt{src/kernel.c} agar hanya
+    mencetak \textbf{5 kali} lalu berhenti (ganti \texttt{while(1)}
+    dengan loop terbatas). Amati apakah Thread~B dan Thread~C tetap
+    berjalan setelah Thread~A selesai, lalu jelaskan peran
+    \texttt{thread\_exit()} dalam skenario ini.\\[0.3cm]
+    \textbf{Jawaban:}\\
+    \textit{[Isi jawaban di sini]}
+
+    \item \textbf{Refleksi: \textit{cooperative} vs.\
+    \textit{preemptive scheduling}.}\\
+    Sistem IF-OS saat ini menggunakan \textit{cooperative scheduling}
+    di mana thread hanya berganti saat secara sadar memanggil
+    \texttt{thread\_yield()}.
+
+    \begin{enumerate}
+        \item[(a)] Apa kelemahan utama \textit{cooperative scheduling}
+                   dibandingkan \textit{preemptive scheduling}?
+                   Berikan contoh skenario nyata di mana kelemahan
+                   ini berbahaya.\\[0.3cm]
+                   \textbf{Jawaban:}\\
+                   \textit{[Isi jawaban di sini]}
+
+        \item[(b)] Komponen perangkat keras apa yang perlu ditambahkan
+                   agar kernel dapat memaksa pergantian thread secara
+                   otomatis tanpa bergantung pada kepatuhan thread
+                   itu sendiri?\\[0.3cm]
+                   \textbf{Jawaban:}\\
+                   \textit{[Isi jawaban di sini]}
+    \end{enumerate}
+
+\end{enumerate}

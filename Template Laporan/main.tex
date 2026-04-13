@@ -1,0 +1,63 @@
+\documentclass[12pt,a4paper]{report}
+\usepackage{config}
+
+\pagestyle{main}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+% ===== HALAMAN SAMPUL =====
+\thispagestyle{empty}
+\newgeometry{margin=0cm}
+\begin{tikzpicture}[remember picture, overlay]
+    % --- Top accent bar ---
+    \fill[accentdark] (current page.north west) rectangle
+        ([yshift=-3.5cm]current page.north east);
+    % --- Logo ---
+    \node[anchor=center] at ([yshift=-1.75cm]current page.north)
+        {\includegraphics[scale=0.15]{Figure/ifitera-header.png}};
+\end{tikzpicture}
+\begin{center}
+    \vspace*{4.5cm}
+    {\color{textsec}\large\MakeUppercase{\textls[120]{Hands-On Praktikum}}}\\[0.6cm]
+    {\color{accentdark}\fontsize{32}{38}\selectfont\bfseries\courseName{}}\\[0.3cm]
+    {\color{textsec}\Large \courseCode{} \,\textbar\, \semester{}}\\[1.5cm]
+    {\color{accent}\rule{0.35\textwidth}{2pt}}\\[1.5cm]
+    \renewcommand{\arraystretch}{1.4}
+    \begin{tabular}{@{} >{\color{textsec}}r @{\hspace{0.6cm}} l @{}}
+        Mata Kuliah & \courseName{} (\courseCode{}) \\
+        Semester    & \semester{}                   \\
+        Institusi   & \institution{}                \\
+        Dosen       & \dosenPengampu{}              \\
+        Asisten     & \labAssistantOne{}            \\
+                    & \labAssistantTwo{}            \\
+    \end{tabular}\\[1cm]
+    {\color{accent}\rule{0.35\textwidth}{2pt}}\\[1cm]
+    {\color{textsec}\large\MakeUppercase{\textls[120]{Dikerjakan Oleh}}}\\[0.6cm]
+    \renewcommand{\arraystretch}{1.4}
+    \begin{tabular}{@{} >{\color{textsec}}r @{\hspace{0.6cm}} l @{}}
+        Nama            & \studentName{}  \\
+        NIM             & \stuid{}        \\
+        Kelas Praktikum & \practClass{}   \\
+        Program Studi   & \studyProgram{} \\
+        Tanggal         & \today{}        \\
+    \end{tabular}
+    \vfill
+    {\color{textsec}\small\textcopyright{} \the\year{} --- \institution{}}\\[1.5cm]
+\end{center}
+\restoregeometry
+\newpage
+
+% ===== DAFTAR ISI =====
+\tableofcontents
+\newpage
+
+%%%%%%%%%%%%%%%%%%%%% BODY DOCUMENT %%%%%%%%%%%%%%%%%%%%%
+\input{chapters/template}
+
+%%%%%%%%%%%%%%%%%%%%% REFERENSI %%%%%%%%%%%%%%%%%%%%%
+\bibliographystyle{IEEEtran}
+\bibliography{Referensi}
+
+\end{document}

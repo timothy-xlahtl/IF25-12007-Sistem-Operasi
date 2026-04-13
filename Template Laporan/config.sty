@@ -1,0 +1,202 @@
+%%%%%%%%%%%%%%%%%%%%%%%%% Credit %%%%%%%%%%%%%%%%%%%%%%%%
+% template ini dibuat oleh martin.manullang@if.itera.ac.id
+% untuk dipergunakan oleh seluruh sivitas akademik itera.
+
+%%%%%%%%%%%%%%%%%%%%%%%%% ENCODING & FONT %%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{inter}                          % Modern sans-serif (Inter)
+\renewcommand{\familydefault}{\sfdefault}   % Sans-serif as default
+\usepackage{inconsolata}                    % Clean monospace for code
+\usepackage{microtype}                      % Letter spacing & microtypography
+\usepackage{textcomp}                       % Extra text symbols
+
+%%%%%%%%%%%%%%%%%%%%%%%%% PAGE LAYOUT %%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[
+    a4paper,
+    left=2.5cm, right=2.5cm,
+    top=3cm, bottom=2.5cm,
+    headheight=16pt
+]{geometry}
+\usepackage{setspace}
+\setstretch{1.35}                           % Wider line spacing
+\usepackage[parfill]{parskip}               % Space between paragraphs, no indent
+
+%%%%%%%%%%%%%%%%%%%%%%%%% COLORS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{xcolor}
+% --- Primary palette ---
+\definecolor{accent}{HTML}{2563EB}          % Vivid blue
+\definecolor{accentdark}{HTML}{1E40AF}      % Deep blue for headings
+\definecolor{accentlight}{HTML}{DBEAFE}     % Pale blue tint
+\definecolor{textmain}{HTML}{1F2937}        % Near-black body text
+\definecolor{textsec}{HTML}{6B7280}         % Gray secondary text
+% --- Code palette ---
+\definecolor{codebg}{HTML}{F8FAFC}
+\definecolor{codeborder}{HTML}{E2E8F0}
+\definecolor{codegreen}{HTML}{059669}
+\definecolor{codepurple}{HTML}{7C3AED}
+\definecolor{codegray}{HTML}{94A3B8}
+\definecolor{codeorange}{HTML}{EA580C}
+\color{textmain}                            % Set default text color
+
+%%%%%%%%%%%%%%%%%%%%%%%%% HEADINGS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{titlesec}
+\usepackage{titletoc}
+
+\titleformat{\chapter}[display]
+    {\normalfont\huge\bfseries\color{accentdark}}
+    {\Large\color{textsec}\MakeUppercase{\chaptertitlename}~\thechapter}
+    {10pt}
+    {\color{accent}\rule{\textwidth}{1.5pt}\\[6pt]\Huge}
+    [\vspace{-6pt}]
+
+\titleformat{\section}
+    {\normalfont\Large\bfseries\color{accentdark}}
+    {\thesection}{12pt}{}
+    [\vspace{-4pt}{\color{accent}\rule{0.3\textwidth}{1.5pt}}]
+
+\titleformat{\subsection}
+    {\normalfont\large\bfseries\color{textmain}}
+    {\thesubsection}{10pt}{}
+
+\titleformat{\subsubsection}
+    {\normalfont\normalsize\bfseries\color{textmain}}
+    {\thesubsubsection}{8pt}{}
+
+\titlespacing*{\chapter}{0pt}{-20pt}{30pt}
+\titlespacing*{\section}{0pt}{28pt}{14pt}
+\titlespacing*{\subsection}{0pt}{20pt}{10pt}
+\titlespacing*{\subsubsection}{0pt}{14pt}{6pt}
+
+%%%%%%%%%%%%%%%%%%%%%%%%% HEADER & FOOTER %%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{fancyhdr}
+\fancypagestyle{main}{%
+    \fancyhf{}%
+    \fancyhead[L]{\small\color{textsec}\studentName{} --- \stuid{}}%
+    \fancyhead[R]{\small\color{textsec}\thepage}%
+    \fancyfoot[C]{\small\color{textsec}Hands-On Praktikum --- \courseName{}}%
+    \renewcommand{\headrulewidth}{0.4pt}%
+    \renewcommand{\footrulewidth}{0pt}%
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%% GRAPHICS & TABLES %%%%%%%%%%%%%%%%%%%%%
+\usepackage{graphicx}
+\usepackage{caption}
+\captionsetup[table]{name=Tabel, font={sf,small}, labelfont={bf,color=accentdark}}
+\captionsetup[figure]{name=Gambar, font={sf,small}, labelfont={bf,color=accentdark}}
+\usepackage{subcaption}
+\usepackage{placeins}
+\usepackage{float}
+\usepackage{tabulary}
+\usepackage{multirow}
+\usepackage{booktabs}
+\usepackage{array}
+
+%%%%%%%%%%%%%%%%%%%%%%%%% CODE LISTINGS %%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{listings}
+\lstdefinestyle{modern}{
+    backgroundcolor=\color{codebg},
+    commentstyle=\color{codegreen}\itshape,
+    keywordstyle=\color{accent}\bfseries,
+    numberstyle=\scriptsize\color{codegray},
+    stringstyle=\color{codeorange},
+    basicstyle=\ttfamily\small,
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=8pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=4,
+    frame=single,
+    rulecolor=\color{codeborder},
+    xleftmargin=16pt,
+    framexleftmargin=16pt,
+    aboveskip=16pt,
+    belowskip=12pt
+}
+\lstset{style=modern}
+\renewcommand{\lstlistingname}{Kode}
+
+%%%%%%%%%%%%%%%%%%%%%%%%% HYPERLINKS %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=accentdark,
+    citecolor=accentdark,
+    urlcolor=accent,
+    pdfborder={0 0 0}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%% LISTS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{enumitem}
+\setlist{itemsep=4pt, parsep=2pt, topsep=8pt}
+\setlist[itemize]{label=\textcolor{accent}{\textbullet}}
+\setlist[enumerate]{font=\bfseries\color{accent}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%% TOC STYLE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\contentsmargin{0pt}
+\titlecontents{chapter}[0em]
+    {\addvspace{14pt}\large\bfseries\color{accentdark}}
+    {\contentslabel{2em}}
+    {\hspace*{-2em}}
+    {\hfill\contentspage}
+\titlecontents{section}[2em]
+    {\addvspace{3pt}\color{textmain}}
+    {\contentslabel{2.5em}}
+    {\hspace*{-2.5em}}
+    {\titlerule*[8pt]{.}\contentspage}
+\titlecontents{subsection}[5em]
+    {\small\color{textsec}}
+    {\contentslabel{3em}}
+    {\hspace*{-3em}}
+    {\titlerule*[8pt]{.}\contentspage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%% MISC %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[all]{xy}
+\usepackage{tikz}
+\usepackage{verbatim}
+\usepackage{lipsum}
+\usepackage{etoolbox}
+\usepackage[ddmmyyyy]{datetime}
+
+%%%%%%%%%%%%%%%%%%%%%%%%% PACKAGE ends HERE %%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%% Identitas Mata Kuliah %%%%%%%%%%%%%%%%%%
+% Ubah nilai-nilai di bawah ini sesuai dengan kebutuhan.
+
+\newcommand{\courseName}{Sistem Operasi}
+\newcommand{\courseCode}{IF25-12007}
+\newcommand{\semester}{Genap 2025/2026}
+\newcommand{\institution}{Institut Teknologi Sumatera}
+\newcommand{\dosenPengampu}{Nama Dosen Pengampu, S.T., M.T.}
+\newcommand{\labAssistantOne}{Nama Asisten Pertama}
+\newcommand{\labAssistantTwo}{Nama Asisten Kedua}
+
+%%%%%%%%%%%%%%%%%%%%%%%%% Identitas Mahasiswa %%%%%%%%%%%%%%%%%%%%
+% Diisi oleh mahasiswa.
+
+\newcommand{\stuid}{NIM Mahasiswa}
+\newcommand{\studentName}{Nama Mahasiswa}
+\newcommand{\studyProgram}{Teknik Informatika}
+\newcommand{\practClass}{XX}
+
+%%%%%%%%%%%%%%%%%%% Theorem-style Environments %%%%%%%%%%%%%%%%%%%%
+\newtheorem{thm}{Teorema}
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{defn}[thm]{Definisi}
+\newtheorem{exa}[thm]{Contoh}
+\newtheorem{rem}[thm]{Catatan}
+\newtheorem{coro}[thm]{Korolari}
+\newtheorem{quest}{Pertanyaan}[section]
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%% Shortcut for usual set of numbers %%%%%%%%%%%
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
